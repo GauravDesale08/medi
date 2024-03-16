@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:medihub/features/auth/screens/LoginScreen.dart';
 import 'package:medihub/features/auth/screens/SignupScreen.dart';
 import 'package:medihub/features/doctor/doctor.dart';
+import 'package:medihub/features/pharmacy/screens/cart.dart';
+import 'package:medihub/features/pharmacy/screens/productSelected.dart';
 import 'package:medihub/features/pharmacy/screens/verticalList.dart';
 import 'package:medihub/home.dart';
 
@@ -23,6 +25,13 @@ class Routes {
 
       case VerticalList.routeName:
         return CupertinoPageRoute(builder: (context) => const VerticalList());
+
+      case PharmacyCart.routeName:
+        return CupertinoPageRoute(builder: (context) => const PharmacyCart());
+
+      case ProductSelected.routeName:
+        return CupertinoPageRoute(
+            builder: (context) => const ProductSelected());
 
       // case SplashScreen.routeName: return CupertinoPageRoute(
       //   builder: (context) => const SplashScreen()

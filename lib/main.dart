@@ -1,22 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:medihub/constants/routes.dart';
+import 'package:medihub/features/chat/services/chatData.dart';
+import 'package:medihub/features/pharmacy/screens/productSelected.dart';
 import 'package:medihub/home.dart';
 import 'package:medihub/home1.dart';
 import 'package:medihub/utils/splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart'; // Import the provider package
 
-import 'features/top_doctor/screens/doctor_hori.dart';
-
-String? authToken;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   authToken = sharedPreferences.getString('x-auth-token');
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ProductData()),
+        ChangeNotifierProvider(create: (context) => ChatData()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

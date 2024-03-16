@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:medihub/features/chat/screen/chat.dart';
 import 'package:medihub/constants/colors.dart';
+import 'package:medihub/features/schedule/screen/schedule.dart';
 import 'package:medihub/home1.dart';
+import 'package:medihub/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,9 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     // Replace these with your actual pages
     Home1(),
-    Container(color: Colors.green),
-    Container(color: Colors.blue),
-    Container(color: Colors.purpleAccent),
+    Chat(),
+    Schedule(),
+    ProfileTwoPage(),
   ];
 
   void _onItemTapped(int index) {
