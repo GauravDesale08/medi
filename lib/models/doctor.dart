@@ -15,7 +15,7 @@ class Doctor {
       this.doctDesc});
 
   Doctor.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['_id'];
     doctId = json['doctId'];
     doctName = json['doctName'];
     doctImage = json['doctImage'];

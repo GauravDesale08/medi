@@ -109,7 +109,7 @@ class _Home1State extends State<Home1> {
                             )
                           ],
                         ),
-                        HorizontalDoctorList(),
+                        // HorizontalDoctorList(),
                       ],
                     ),
                   ),

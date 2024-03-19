@@ -11,6 +11,9 @@ class DoctorScreen extends StatefulWidget {
   State<DoctorScreen> createState() => _DoctorScreenState();
 }
 
+void NavigateToDoctors(){
+  
+}
 class _DoctorScreenState extends State<DoctorScreen> {
   @override
   Widget build(BuildContext context) {
@@ -30,38 +33,41 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 hintText: "Search doctor, drug, article...",
               ),
             ),
-            Row(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: 15, left: 10, right: 5),
-                  child: Row(
-                    children: [
-                      CustomContainer(
-                        text: 'General',
-                        imagePath: 'assets/Doctor.png',
-                        routeName: 'doctor',
-                      ),
-                      CustomContainer(
-                        text: 'Lungs',
-                        imagePath: 'assets/Pharmacy.png',
-                        routeName: 'pharmacy',
-                      ),
-                      CustomContainer(
-                        text: 'Dentist',
-                        imagePath: 'assets/Hospital.png',
-                        routeName:
-                            '/hospital', // Replace '/hospital' with the actual named route
-                      ),
-                      CustomContainer(
-                        text: 'Psychiatrist',
-                        imagePath: 'assets/Ambulance.png',
-                        routeName:
-                            '/ambulance', // Replace '/ambulance' with the actual named route
-                      ),
-                    ],
+            GestureDetector(
+              onTap: (){},
+              child: Row(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.only(top: 15, left: 10, right: 5),
+                    child: Row(
+                      children: [
+                        CustomContainer(
+                          text: 'General',
+                          imagePath: 'assets/Doctor.png',
+                          routeName: 'doctor',
+                        ),
+                        CustomContainer(
+                          text: 'Lungs',
+                          imagePath: 'assets/Pharmacy.png',
+                          routeName: 'pharmacy',
+                        ),
+                        CustomContainer(
+                          text: 'Dentist',
+                          imagePath: 'assets/Hospital.png',
+                          routeName:
+                              '/hospital', // Replace '/hospital' with the actual named route
+                        ),
+                        CustomContainer(
+                          text: 'Psychiatrist',
+                          imagePath: 'assets/Ambulance.png',
+                          routeName:
+                              '/ambulance', // Replace '/ambulance' with the actual named route
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Row(
               children: [
