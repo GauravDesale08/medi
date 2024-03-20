@@ -106,7 +106,8 @@ class _VerticalListState extends State<VerticalList> {
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Image.network(
-                      product.medImage[0], // Assuming medImage is a list of URLs
+                      product.medImage, // Assuming medImage is a list of URLs
+                      // 'https://res.cloudinary.com/drerbcnk2/image/upload/v1710949047/koinoybmpsctvbccc8kv.png'
                     ),
                   ),
                 ),
