@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:medihub/constants/colors.dart';
 import 'package:medihub/features/pharmacy/screens/cart.dart';
+import 'package:medihub/features/pharmacy/services/pharmacy_services.dart';
+import 'package:medihub/features/pharmacy/services/productModel.dart';
 import 'package:provider/provider.dart';
 
 class ProductData extends ChangeNotifier {
@@ -22,7 +24,8 @@ class ProductData extends ChangeNotifier {
 }
 
 class ProductSelected extends StatefulWidget {
-  const ProductSelected({Key? key}) : super(key: key);
+  final String medName;
+  const ProductSelected({Key? key,required this.medName}) : super(key: key);
 
   static const String routeName = "productSelected";
 
@@ -31,6 +34,23 @@ class ProductSelected extends StatefulWidget {
 }
 
 class _ProductSelectedState extends State<ProductSelected> {
+
+  Pharmacy? pharmacy;
+  final PharmacyServices pharmacyServices = new PharmacyServices();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchPharmacyDetails();
+  }
+
+  fetchPharmacyDetails() async{
+    pharmacy = await pharmacyServices.getMedicineDetails(medName: widget.medName, context: context); 
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var productData = Provider.of<ProductData>(context);
@@ -48,102 +68,105 @@ class _ProductSelectedState extends State<ProductSelected> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: pharmacy==null? const CircularProgressIndicator() :SingleChildScrollView(
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      if (pharmacy != null) // Check if pharmacy is not null
+        Image.network(
+          pharmacy!.medImage, // Access medImage using the null check operator
+          height: 300,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              'https://via.placeholder.com/300',
-              height: 300,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            Text(
+              widget.medName,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            if (pharmacy != null) // Check if pharmacy is not null
+              Text(
+                '${pharmacy!.medQuantity.toString()}ml', // Access medQuantity using the null check operator
+              ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    productData.decrementQuantity();
+                  },
+                  icon: const Icon(Icons.remove),
+                  color: bgColor, // Set the color of the icon
+                  splashRadius: 20, // Set the splash radius
+                  iconSize: 24, // Set the icon size
+                ),
+                Text('${productData.quantity}'),
+                IconButton(
+                  onPressed: () {
+                    productData.incrementQuantity();
+                  },
+                  icon: const Icon(Icons.add),
+                  color: bgColor, // Set the color of the icon
+                  splashRadius: 20, // Set the splash radius
+                  iconSize: 24, // Set the icon size
+                ),
+                SizedBox(
+                  width: 180,
+                ),
+                if (pharmacy != null) // Check if pharmacy is not null
                   Text(
-                    'Drug Name',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    'Drug Weight',
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          productData.decrementQuantity();
-                        },
-                        icon: const Icon(Icons.remove),
-                        color: bgColor, // Set the color of the icon
-                        splashRadius: 20, // Set the splash radius
-                        iconSize: 24, // Set the icon size
-                      ),
-                      Text('${productData.quantity}'),
-                      IconButton(
-                        onPressed: () {
-                          productData.incrementQuantity();
-                        },
-                        icon: const Icon(Icons.add),
-                        color: bgColor, // Set the color of the icon
-                        splashRadius: 20, // Set the splash radius
-                        iconSize: 24, // Set the icon size
-                      ),
-                      SizedBox(
-                        width: 180,
-                      ),
-                      Text(
-                        'Price',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24, // Set the font size to make it big
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Description',
+                    '₹${pharmacy!.medPrice.toString()}', // Access medPrice using the null check operator
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
+                      fontSize: 24, // Set the font size to make it big
                     ),
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. SedLorem ipsum dolor sit amet, consectetur adipiscing elit. SedLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed.........',
-                  ),
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity, // Set width to match parent
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // Add to cart logic
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            bgColor, // Use bgColor as the button's background color
-                      ),
-                      icon: Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
-                      ), // Add cart icon
-                      label: const Text(
-                        'Add to Cart',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Description',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 5),
+            Text(
+              pharmacy!.medDesc,
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: double.infinity, // Set width to match parent
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // Add to cart logic
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      bgColor, // Use bgColor as the button's background color
+                ),
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
+                ), // Add cart icon
+                label: const Text(
+                  'Add to Cart',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ],
         ),
       ),
+    ],
+  ),
+),
     );
   }
 }

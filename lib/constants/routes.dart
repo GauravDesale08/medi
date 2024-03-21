@@ -30,8 +30,9 @@ class Routes {
         return CupertinoPageRoute(builder: (context) => const PharmacyCart());
 
       case ProductSelected.routeName:
+        final medName = settings.arguments as String;
         return CupertinoPageRoute(
-            builder: (context) => const ProductSelected());
+            builder: (context) => ProductSelected(medName: medName));
 
       
 

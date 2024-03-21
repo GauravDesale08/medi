@@ -35,4 +35,27 @@ class PharmacyServices {
     }
     return pharmacyList;
   }
+
+ Future<Pharmacy> getMedicineDetails({required String medName, required BuildContext context}) async {
+  try {
+    final response = await http.get(
+      Uri.parse('$uri/api/medicine-details?medName=$medName'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      Pharmacy medicineDetails = Pharmacy.fromMap(jsonData['data']);
+      return medicineDetails; // Return the fetched medicine details
+    } else {
+      showSnackBar(context, 'Failed to fetch medicine details');
+      throw Exception('Failed to fetch medicine details'); // Throw an exception to handle failure
+    }
+  } catch (e) {
+    showSnackBar(context, 'Error: $e');
+    throw Exception('Error fetching medicine details: $e'); // Throw an exception to handle errors
+  }
+}
+
+
 }

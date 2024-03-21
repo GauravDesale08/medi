@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medihub/features/pharmacy/screens/cart.dart';
+import 'package:medihub/features/pharmacy/screens/productSelected.dart';
 import 'package:medihub/features/pharmacy/services/pharmacy_services.dart';
 import 'package:medihub/features/pharmacy/services/productModel.dart';
 import 'package:medihub/utils/customBanner.dart';
@@ -88,7 +89,9 @@ class _VerticalListState extends State<VerticalList> {
       final product = pharmacyList![index];
       return GestureDetector(
         onTap: () {
-          // Add your onTap action here
+         String medName = product.medName;
+         Navigator.pushNamed(context, ProductSelected.routeName,arguments: medName);
+      
         },
         child: Flexible(
           child: Column(
