@@ -31,7 +31,7 @@ class _Home1State extends State<Home1> {
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        width: 150,
+                        width: 120,
                       ),
                       Icon(
                         Icons.notifications_active_outlined,
@@ -99,7 +99,7 @@ class _Home1State extends State<Home1> {
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
-                              width: 190,
+                              width: 150,
                             ),
                             Text(
                               "See All",

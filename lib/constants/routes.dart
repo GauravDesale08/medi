@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medihub/features/auth/screens/LoginScreen.dart';
 import 'package:medihub/features/auth/screens/SignupScreen.dart';
+import 'package:medihub/features/doctor/catDoctor/screens/doctor_vertical.dart';
 import 'package:medihub/features/doctor/doctor.dart';
+import 'package:medihub/features/doctor/services/doctorService.dart';
 import 'package:medihub/features/pharmacy/screens/cart.dart';
 import 'package:medihub/features/pharmacy/screens/productSelected.dart';
 import 'package:medihub/features/pharmacy/screens/verticalList.dart';
@@ -33,6 +35,11 @@ class Routes {
         final medName = settings.arguments as String;
         return CupertinoPageRoute(
             builder: (context) => ProductSelected(medName: medName));
+
+      case DoctorVertical.routeName:
+        final doctCategory = settings.arguments as String;
+        return CupertinoPageRoute(
+            builder: (context) => DoctorVertical(doctCategory:doctCategory));
 
       
 

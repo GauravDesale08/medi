@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:medihub/features/doctor/catDoctor/screens/doctor_vertical.dart';
 import 'package:medihub/features/doctor/doctor.dart';
 
-class CustomContainer extends StatelessWidget {
+class CustomDoctorContainer extends StatelessWidget {
   final String text;
   final String imagePath;
-  final String routeName;
+  // final String routeName;
 
-  const CustomContainer({
+  const CustomDoctorContainer({
     Key? key,
     required this.text,
     required this.imagePath,
-    required this.routeName,
+    // required this.routeName,
   }) : super(key: key);
 
   @override
@@ -21,7 +22,7 @@ class CustomContainer extends StatelessWidget {
         onTap: () {
           if(text!=null) { 
             onCustomContainerTap(text);
-          Navigator.pushNamed(context, routeName);
+            Navigator.pushNamed(context, DoctorVertical.routeName,arguments: text);
           }
         },
         child: Container(

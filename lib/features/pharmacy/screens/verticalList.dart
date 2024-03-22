@@ -72,97 +72,97 @@ class _VerticalListState extends State<VerticalList> {
             },
           ),
           const SizedBox(height: 20),
-          pharmacyList == null ? const CircularProgressIndicator() : Column(
+          pharmacyList == null ? Center(child: const CircularProgressIndicator()) : Column(
             children: [
               SizedBox(
-  height: 170,
-  child: GridView.builder(
-    scrollDirection: Axis.horizontal,
-    padding: const EdgeInsets.only(left: 15),
-    itemCount: pharmacyList!.length,
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 1,
-      childAspectRatio: 1.4,
-      mainAxisSpacing: 10,
-    ),
-    itemBuilder: (context, index) {
-      final product = pharmacyList![index];
-      return GestureDetector(
-        onTap: () {
-         String medName = product.medName;
-         Navigator.pushNamed(context, ProductSelected.routeName,arguments: medName);
-      
-        },
-        child: Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 130,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black12,
-                      width: 0.5,
+                      height: 160,
+                      child: GridView.builder(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.only(left: 15),
+                        itemCount: pharmacyList!.length,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          childAspectRatio: 1.4,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemBuilder: (context, index) {
+                          final product = pharmacyList![index];
+                          return GestureDetector(
+                            onTap: () {
+                            String medName = product.medName;
+                            Navigator.pushNamed(context, ProductSelected.routeName,arguments: medName);
+                          
+                            },
+                            child: Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 130,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.black12,
+                                          width: 0.5,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Image.network(
+                                          product.medImage, // Assuming medImage is a list of URLs
+                                          // 'https://res.cloudinary.com/drerbcnk2/image/upload/v1710949047/koinoybmpsctvbccc8kv.png'
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    padding: const EdgeInsets.only(
+                                      left: 0,
+                                      top: 5,
+                                      right: 15,
+                                    ),
+                                    child: Text(
+                                      product.medName,
+                                      maxLines: 1,
+                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    padding: const EdgeInsets.only(
+                                      left: 0,
+                                      top: 5,
+                                      right: 15,
+                                    ),
+                                    child: Text(
+                                      '${product.medQuantity}ml',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '₹${product.medPrice}',
+                                      ),
+                                      Spacer(),
+                                      IconButton(
+                                        onPressed: () {
+                                          // Add your onPressed action here
+                                        },
+                                        icon: Icon(Icons.add),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Image.network(
-                      product.medImage, // Assuming medImage is a list of URLs
-                      // 'https://res.cloudinary.com/drerbcnk2/image/upload/v1710949047/koinoybmpsctvbccc8kv.png'
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.only(
-                  left: 0,
-                  top: 5,
-                  right: 15,
-                ),
-                child: Text(
-                  product.medName,
-                  maxLines: 1,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Container(
-                alignment: Alignment.topLeft,
-                padding: const EdgeInsets.only(
-                  left: 0,
-                  top: 5,
-                  right: 15,
-                ),
-                child: Text(
-                  '${product.medQuantity}ml',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Row(
-                children: [
-                  Text(
-                    '₹${product.medPrice}',
-                  ),
-                  Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      // Add your onPressed action here
-                    },
-                    icon: Icon(Icons.add),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  ),
-),
 
             ],
           ) 

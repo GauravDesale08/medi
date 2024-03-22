@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:medihub/utils/customContainer.dart';
+import 'package:medihub/utils/custom_doctor_container.dart';
 
 class DoctorScreen extends StatefulWidget {
   const DoctorScreen({Key? key}) : super(key: key);
@@ -11,9 +12,15 @@ class DoctorScreen extends StatefulWidget {
   State<DoctorScreen> createState() => _DoctorScreenState();
 }
 
-void NavigateToDoctors(){
-  
-}
+void onCustomContainerTap(String text) {
+    // Handle the tap event here, you can navigate or perform other actions
+    print("Tapped CustomContainer with text: $text");
+    // You can call your backend API here and pass the text as needed
+  }
+
+final GlobalKey<_DoctorScreenState> doctorScreenStateKey =
+    GlobalKey<_DoctorScreenState>();
+
 class _DoctorScreenState extends State<DoctorScreen> {
   @override
   Widget build(BuildContext context) {
@@ -34,34 +41,36 @@ class _DoctorScreenState extends State<DoctorScreen> {
               ),
             ),
             GestureDetector(
-              onTap: (){},
+              onTap: (){
+                
+              },
               child: Row(
                 children: [
                   const Padding(
                     padding: EdgeInsets.only(top: 15, left: 10, right: 5),
                     child: Row(
                       children: [
-                        CustomContainer(
+                        CustomDoctorContainer(
                           text: 'General',
                           imagePath: 'assets/Doctor.png',
-                          routeName: 'doctor',
+                          // routeName: 'General',
                         ),
-                        CustomContainer(
+                        CustomDoctorContainer(
                           text: 'Lungs',
                           imagePath: 'assets/Pharmacy.png',
-                          routeName: 'pharmacy',
+                          // routeName: 'pharmacy',
                         ),
-                        CustomContainer(
+                        CustomDoctorContainer(
                           text: 'Dentist',
                           imagePath: 'assets/Hospital.png',
-                          routeName:
-                              '/hospital', // Replace '/hospital' with the actual named route
+                          // routeName:
+                          //     '/hospital', // Replace '/hospital' with the actual named route
                         ),
-                        CustomContainer(
+                        CustomDoctorContainer(
                           text: 'Psychiatrist',
                           imagePath: 'assets/Ambulance.png',
-                          routeName:
-                              '/ambulance', // Replace '/ambulance' with the actual named route
+                          // routeName:
+                          //     '/ambulance', // Replace '/ambulance' with the actual named route
                         ),
                       ],
                     ),
@@ -75,21 +84,21 @@ class _DoctorScreenState extends State<DoctorScreen> {
                   padding: EdgeInsets.only(top: 15, left: 10, right: 5),
                   child: Row(
                     children: [
-                      CustomContainer(
+                      CustomDoctorContainer(
                         text: 'Covid-19',
                         imagePath: 'assets/Doctor.png',
-                        routeName: 'doctor',
+                        // routeName: 'doctor',
                       ),
-                      CustomContainer(
+                      CustomDoctorContainer(
                         text: 'Surgeon',
                         imagePath: 'assets/Pharmacy.png',
-                        routeName: 'pharmacy',
+                        // routeName: 'pharmacy',
                       ),
-                      CustomContainer(
+                      CustomDoctorContainer(
                         text: 'Cardiologist',
                         imagePath: 'assets/Hospital.png',
-                        routeName:
-                            '/hospital', // Replace '/hospital' with the actual named route
+                        // routeName:
+                        //     '/hospital', // Replace '/hospital' with the actual named route
                       ),
                     ],
                   ),

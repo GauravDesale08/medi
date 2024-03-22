@@ -36,7 +36,7 @@ class ProductSelected extends StatefulWidget {
 class _ProductSelectedState extends State<ProductSelected> {
 
   Pharmacy? pharmacy;
-  final PharmacyServices pharmacyServices = new PharmacyServices();
+  final PharmacyServices pharmacyServices = PharmacyServices();
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _ProductSelectedState extends State<ProductSelected> {
           ),
         ],
       ),
-      body: pharmacy==null? const CircularProgressIndicator() :SingleChildScrollView(
+      body: pharmacy==null? const Center(child: CircularProgressIndicator()) :SingleChildScrollView(
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -116,13 +116,13 @@ class _ProductSelectedState extends State<ProductSelected> {
                   splashRadius: 20, // Set the splash radius
                   iconSize: 24, // Set the icon size
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 180,
                 ),
                 if (pharmacy != null) // Check if pharmacy is not null
                   Text(
                     '₹${pharmacy!.medPrice.toString()}', // Access medPrice using the null check operator
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 24, // Set the font size to make it big
                     ),
@@ -130,7 +130,7 @@ class _ProductSelectedState extends State<ProductSelected> {
               ],
             ),
             const SizedBox(height: 10),
-            Text(
+            const Text(
               'Description',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -151,7 +151,7 @@ class _ProductSelectedState extends State<ProductSelected> {
                   backgroundColor:
                       bgColor, // Use bgColor as the button's background color
                 ),
-                icon: Icon(
+                icon:const Icon(
                   Icons.shopping_cart,
                   color: Colors.white,
                 ), // Add cart icon
