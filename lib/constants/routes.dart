@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:medihub/features/auth/screens/LoginScreen.dart';
 import 'package:medihub/features/auth/screens/SignupScreen.dart';
+import 'package:medihub/features/doctor/catDoctor/screens/doctor_details.dart';
 import 'package:medihub/features/doctor/catDoctor/screens/doctor_vertical.dart';
 import 'package:medihub/features/doctor/doctor.dart';
 import 'package:medihub/features/doctor/services/doctorService.dart';
@@ -39,7 +40,14 @@ class Routes {
       case DoctorVertical.routeName:
         final doctCategory = settings.arguments as String;
         return CupertinoPageRoute(
-            builder: (context) => DoctorVertical(doctCategory:doctCategory));
+            builder: (context) => DoctorVertical(doctCategory: doctCategory,));
+
+      case DoctorDetails.routeName:
+        final doctId = settings.arguments as String;
+        return CupertinoPageRoute(
+            builder: (context) => DoctorDetails(doctId: doctId,));
+
+      
 
       
 

@@ -18,19 +18,18 @@ void onCustomContainerTap(String text) {
     // You can call your backend API here and pass the text as needed
   }
 
-final GlobalKey<_DoctorScreenState> doctorScreenStateKey =
-    GlobalKey<_DoctorScreenState>();
+
 
 class _DoctorScreenState extends State<DoctorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Find Doctor'),
+        title: const Text('Find Doctor'),
         centerTitle: true, // Center the title
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             const Padding(
@@ -44,9 +43,9 @@ class _DoctorScreenState extends State<DoctorScreen> {
               onTap: (){
                 
               },
-              child: Row(
+              child: const Row(
                 children: [
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.only(top: 15, left: 10, right: 5),
                     child: Row(
                       children: [
@@ -78,9 +77,9 @@ class _DoctorScreenState extends State<DoctorScreen> {
                 ],
               ),
             ),
-            Row(
+            const Row(
               children: [
-                const Padding(
+                 Padding(
                   padding: EdgeInsets.only(top: 15, left: 10, right: 5),
                   child: Row(
                     children: [
@@ -95,7 +94,7 @@ class _DoctorScreenState extends State<DoctorScreen> {
                         // routeName: 'pharmacy',
                       ),
                       CustomDoctorContainer(
-                        text: 'Cardiologist',
+                        text: 'CardioLogist',
                         imagePath: 'assets/Hospital.png',
                         // routeName:
                         //     '/hospital', // Replace '/hospital' with the actual named route
