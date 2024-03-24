@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medihub/home.dart';
+import 'package:medihub/features/home/screens/home.dart';
 
 class LoginSuccess extends StatefulWidget {
   const LoginSuccess({Key? key}) : super(key: key);

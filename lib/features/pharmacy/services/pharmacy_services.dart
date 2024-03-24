@@ -6,8 +6,10 @@ import 'package:medihub/constants/utils.dart';
 import 'package:medihub/features/pharmacy/services/productModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:medihub/utils/helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PharmacyServices {
+
   Future<List<Pharmacy>> getMedicines({required BuildContext context}) async {
     List<Pharmacy> pharmacyList = [];
 
@@ -56,6 +58,41 @@ class PharmacyServices {
     throw Exception('Error fetching medicine details: $e'); // Throw an exception to handle errors
   }
 }
+
+Future<void> addToCart(String productId, String authToken) async {
+  try {
+    // Define the request body
+    Map<String, dynamic> requestBody = {
+      'id': productId,
+    };
+
+    // Make the POST request to the API endpoint
+    final response = await http.post(
+      Uri.parse('$uri/api/add-to-cart'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': authToken, // Assuming authToken is the user's token
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      // Parse the response body
+      final responseData = jsonDecode(response.body);
+      // Handle the response data as needed
+      print('Added to cart: ${responseData['user']}');
+    } else {
+      // Handle the case where the request was not successful
+      print('Failed to add to cart: ${response.statusCode}');
+      print('Error message: ${response.body}');
+    }
+  } catch (error) {
+    // Handle any errors that occur during the HTTP request
+    print('Error adding to cart: $error');
+  }
+}
+
 
 
 }

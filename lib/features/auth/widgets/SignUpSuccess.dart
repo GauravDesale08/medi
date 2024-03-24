@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medihub/home.dart';
+import 'package:medihub/features/home/screens/home.dart';
 
 class SignUpSuccess extends StatefulWidget {
   const SignUpSuccess({Key? key}) : super(key: key);

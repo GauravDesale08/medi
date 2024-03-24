@@ -3,7 +3,9 @@ import 'package:medihub/constants/colors.dart';
 import 'package:medihub/features/pharmacy/screens/cart.dart';
 import 'package:medihub/features/pharmacy/services/pharmacy_services.dart';
 import 'package:medihub/features/pharmacy/services/productModel.dart';
+import 'package:medihub/utils/splash.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductData extends ChangeNotifier {
   int _quantity = 1;
@@ -37,11 +39,13 @@ class _ProductSelectedState extends State<ProductSelected> {
 
   Pharmacy? pharmacy;
   final PharmacyServices pharmacyServices = PharmacyServices();
+  String? authToken;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     fetchPharmacyDetails();
+    fetchToken();
   }
 
   fetchPharmacyDetails() async{
@@ -50,6 +54,19 @@ class _ProductSelectedState extends State<ProductSelected> {
 
     });
   }
+
+  void fetchToken() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    authToken = sharedPreferences.getString('x-auth-token');
+    // Get the token from shared preferences
+  }
+
+
+  void addPharmacyToCart(String productId, String authToken) async {
+  await pharmacyServices.addToCart(productId,authToken);
+
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +162,7 @@ class _ProductSelectedState extends State<ProductSelected> {
               width: double.infinity, // Set width to match parent
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Add to cart logic
+                  addPharmacyToCart(pharmacy!.id, authToken!);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor:

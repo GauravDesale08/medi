@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:medihub/constants/error_handler.dart';
 import 'package:medihub/constants/utils.dart';
-import 'package:medihub/home1.dart';
+import 'package:medihub/features/home/screens/home1.dart';
 import 'package:medihub/models/user.dart';
 import 'package:http/http.dart' as http;
+import 'package:medihub/providers/user_provider.dart';
 import 'package:medihub/utils/helper.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthServices {
@@ -27,7 +29,8 @@ class AuthServices {
           password : password,
           address : '',
           type : '',
-          token : ''
+          token : '',
+          cart : []
         );
 
         http.Response response =  await http.post(Uri.parse('$uri/api/signup'),
@@ -77,9 +80,12 @@ class AuthServices {
         response: response,
         context: context,
         onSuccess: () async {
+          final responseData = jsonDecode(response.body);
+        final token = responseData['token'];
+        final userData = responseData;
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          // Provider.of<UserProvider>(context, listen: false)
-          //     .setUser(response.body);
+          Provider.of<UserProvider>(context, listen: false)
+              .setUser(User.fromMap(userData));
           await prefs.setString(
               'x-auth-token', jsonDecode(response.body)['token']);
           Navigator.of(context).push(

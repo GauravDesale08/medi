@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:medihub/constants/colors.dart';
 import 'package:medihub/utils/welcome.dart';
 
-import '../home.dart';
+import '../features/home/screens/home.dart';
 
 class SliderScreen extends StatefulWidget {
   @override

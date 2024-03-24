@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medihub/constants/colors.dart';
-import 'package:medihub/home1.dart';
+import 'package:medihub/features/home/screens/home1.dart';
 import 'package:medihub/utils/slider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

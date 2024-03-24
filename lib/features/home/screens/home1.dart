@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:medihub/constants/colors.dart';
 import 'package:medihub/features/top_doctor/screens/doctor_hori.dart';
+import 'package:medihub/providers/user_provider.dart';
 import 'package:medihub/utils/customBanner.dart';
 import 'package:medihub/utils/customContainer.dart';
+import 'package:provider/provider.dart';
 
 class Home1 extends StatefulWidget {
   const Home1({Key? key}) : super(key: key);
@@ -14,6 +16,8 @@ class Home1 extends StatefulWidget {
 class _Home1State extends State<Home1> {
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context).user;
+    print(user.toJson());
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -66,13 +70,12 @@ class _Home1State extends State<Home1> {
                         text: 'Hospital',
                         imagePath: 'assets/Hospital.png',
                         routeName:
-                            '/hospital', // Replace '/hospital' with the actual named route
+                            '/exercise-types', // Replace '/hospital' with the actual named route
                       ),
                       CustomContainer(
                         text: 'Ambulance',
                         imagePath: 'assets/Ambulance.png',
-                        routeName:
-                            '/ambulance', // Replace '/ambulance' with the actual named route
+                        routeName:'/ambulance', // Replace '/ambulance' with the actual named route
                       ),
                     ],
                   ),
@@ -109,9 +112,12 @@ class _Home1State extends State<Home1> {
                             )
                           ],
                         ),
+                        Text(user.name),
                         // HorizontalDoctorList(),
                       ],
                     ),
+
+
                   ),
                 ),
               ],

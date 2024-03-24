@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:medihub/features/chat/screen/chat.dart';
 import 'package:medihub/constants/colors.dart';
 import 'package:medihub/features/schedule/screen/schedule.dart';
-import 'package:medihub/home1.dart';
-import 'package:medihub/profile.dart';
+import 'package:medihub/features/home/screens/home1.dart';
+import 'package:medihub/features/profile/screens/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
