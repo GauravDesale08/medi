@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:medihub/constants/colors.dart';
+import 'package:medihub/features/news/pages/home.dart';
+import 'package:medihub/features/news/pages/vertHome.dart';
 import 'package:medihub/features/top_doctor/screens/doctor_hori.dart';
 import 'package:medihub/providers/user_provider.dart';
 import 'package:medihub/utils/customBanner.dart';
@@ -20,6 +23,7 @@ class _Home1State extends State<Home1> {
     print(user.toJson());
     return Scaffold(
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -75,7 +79,8 @@ class _Home1State extends State<Home1> {
                       CustomContainer(
                         text: 'Ambulance',
                         imagePath: 'assets/Ambulance.png',
-                        routeName:'/ambulance', // Replace '/ambulance' with the actual named route
+                        routeName:
+                            '/ambulance', // Replace '/ambulance' with the actual named route
                       ),
                     ],
                   ),
@@ -116,8 +121,43 @@ class _Home1State extends State<Home1> {
                         // HorizontalDoctorList(),
                       ],
                     ),
-
-
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, left: 18, right: 5),
+                  child: SizedBox(
+                    width: 383,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Health Articles",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, Home.routeName);
+                              },
+                              child: Text(
+                                "See All",
+                                style: TextStyle(
+                                  color: shadowColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(user.name),
+                        // HorizontalDoctorList(),
+                          VertHome(),
+                      ],
+                    ),
                   ),
                 ),
               ],

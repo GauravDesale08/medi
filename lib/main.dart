@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:medihub/constants/routes.dart';
 import 'package:medihub/features/chat/services/chatData.dart';
@@ -39,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: authToken == null ? SplashScreen() : HomeScreen(),
+      home: authToken == null ? HomeScreen() : HomeScreen(),
     );
   }
 }
