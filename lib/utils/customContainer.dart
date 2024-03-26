@@ -15,43 +15,56 @@ class CustomContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
-        onTap: () {
-          if(text!=null) { 
-            onCustomContainerTap(text);
+    return GestureDetector(
+      onTap: () {
+        if (text != null) {
+          onCustomContainerTap(text);
           Navigator.pushNamed(context, routeName);
-          }
-        },
-        child: Container(
-          height: 84,
-          width: 65,
-          decoration: BoxDecoration(
-            color: Colors.white, // Set the background color
-            borderRadius: BorderRadius.circular(8), // Add rounded corners
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5), // Grey color with opacity
-                spreadRadius: 2, // Spread radius
-                blurRadius: 5, // Blur radius
-                offset: Offset(0, 3), // Offset
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(imagePath, width: 32, height: 32),
-              SizedBox(height: 10),
-              Text(
-                text,
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+        }
+      },
+      child: Container(
+        height: 90,
+        width: 78,
+        margin: EdgeInsets.all(6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(imagePath, width: 32, height: 32),
+            SizedBox(height: 5),
+            Text(
+              text,
+              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class CustomContainerWrap extends StatelessWidget {
+  final List<CustomContainer> containers;
+
+  const CustomContainerWrap({Key? key, required this.containers}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 10,
+      runSpacing: 8,
+      children: containers,
     );
   }
 }

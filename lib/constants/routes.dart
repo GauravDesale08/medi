@@ -7,6 +7,8 @@ import 'package:medihub/features/doctor/catDoctor/screens/doctor_vertical.dart';
 import 'package:medihub/features/doctor/doctor.dart';
 import 'package:medihub/features/exercises/screens/exercises_list.dart';
 import 'package:medihub/features/exercises/screens/exercises_types.dart';
+import 'package:medihub/features/news/pages/home.dart';
+import 'package:medihub/features/news/pages/vertHome.dart';
 import 'package:medihub/features/pharmacy/screens/cart.dart';
 import 'package:medihub/features/pharmacy/screens/productSelected.dart';
 import 'package:medihub/features/pharmacy/screens/verticalList.dart';
@@ -91,6 +93,7 @@ class Routes {
           ),
         );
 
+<<<<<<< HEAD
         case AnalyzeSymptom.routeName:
         final args = settings.arguments as Map<String, dynamic>;
         return CupertinoPageRoute(
@@ -99,6 +102,17 @@ class Routes {
             value: args['value'],
           ),
         );
+=======
+
+      case Home.routeName:
+        return CupertinoPageRoute(builder: (context) => const Home());    
+      
+      
+       case VertHome.routeName:
+        return CupertinoPageRoute(builder: (context) => const VertHome());   
+
+      
+>>>>>>> 6b2877b40829ea4506af4baf15aac4c5ef606e85
 
       // case SplashScreen.routeName: return CupertinoPageRoute(
       //   builder: (context) => const SplashScreen()

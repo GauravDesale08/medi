@@ -39,6 +39,10 @@ dependencies:
   http: ^1.2.0
   shared_preferences: ^2.2.2
   provider: ^6.1.2
+  google_fonts: ^6.1.0
+  cached_network_image: ^3.3.1
+  url_launcher: ^6.2.4
+  flutter_spinkit: ^5.2.0
 
 
 dev_dependencies:
