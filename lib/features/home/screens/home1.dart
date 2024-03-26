@@ -79,12 +79,7 @@ class _Home1State extends State<Home1> {
                       CustomContainer(
                         text: 'Ambulance',
                         imagePath: 'assets/Ambulance.png',
-<<<<<<< HEAD
-                        routeName:'/symptom', // Replace '/ambulance' with the actual named route
-=======
-                        routeName:
-                            '/ambulance', // Replace '/ambulance' with the actual named route
->>>>>>> 6b2877b40829ea4506af4baf15aac4c5ef606e85
+                        routeName:'/ambulance', // Replace '/ambulance' with the actual named route
                       ),
                     ],
                   ),

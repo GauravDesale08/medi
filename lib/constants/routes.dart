@@ -93,7 +93,7 @@ class Routes {
           ),
         );
 
-<<<<<<< HEAD
+
         case AnalyzeSymptom.routeName:
         final args = settings.arguments as Map<String, dynamic>;
         return CupertinoPageRoute(
@@ -102,7 +102,7 @@ class Routes {
             value: args['value'],
           ),
         );
-=======
+
 
       case Home.routeName:
         return CupertinoPageRoute(builder: (context) => const Home());    
@@ -112,7 +112,6 @@ class Routes {
         return CupertinoPageRoute(builder: (context) => const VertHome());   
 
       
->>>>>>> 6b2877b40829ea4506af4baf15aac4c5ef606e85
 
       // case SplashScreen.routeName: return CupertinoPageRoute(
       //   builder: (context) => const SplashScreen()
