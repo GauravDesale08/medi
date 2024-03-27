@@ -154,7 +154,7 @@ class _Home1State extends State<Home1> {
                         ),
                         Text(user.name),
                         // HorizontalDoctorList(),
-                          VertHome(),
+                        //   VertHome(),
                       ],
                     ),
                   ),
