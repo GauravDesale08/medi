@@ -5,6 +5,7 @@ import 'package:medihub/features/auth/screens/SignupScreen.dart';
 import 'package:medihub/features/doctor/catDoctor/screens/doctor_details.dart';
 import 'package:medihub/features/doctor/catDoctor/screens/doctor_vertical.dart';
 import 'package:medihub/features/doctor/doctor.dart';
+import 'package:medihub/features/emergency/screens/emergency_screen.dart';
 import 'package:medihub/features/exercises/screens/exercises_list.dart';
 import 'package:medihub/features/exercises/screens/exercises_types.dart';
 import 'package:medihub/features/news/pages/home.dart';
@@ -103,12 +104,15 @@ class Routes {
           ),
         );
 
+      case EmergencyScreen.routeName:
+        return CupertinoPageRoute(builder: (context) => const EmergencyScreen());  
+
 
       case Home.routeName:
         return CupertinoPageRoute(builder: (context) => const Home());    
       
       
-       case VertHome.routeName:
+      case VertHome.routeName:
         return CupertinoPageRoute(builder: (context) => const VertHome());   
 
       

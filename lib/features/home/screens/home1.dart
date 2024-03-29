@@ -1,6 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:medihub/constants/colors.dart';
+import 'package:medihub/features/emergency/screens/emergency_screen.dart';
+import 'package:medihub/features/emergency/services/emergency_services.dart';
 import 'package:medihub/features/news/pages/home.dart';
 import 'package:medihub/features/news/pages/vertHome.dart';
 import 'package:medihub/features/top_doctor/screens/doctor_hori.dart';
@@ -17,10 +21,19 @@ class Home1 extends StatefulWidget {
 }
 
 class _Home1State extends State<Home1> {
+  final EmergencyServices  emergencyService = EmergencyServices();
+
+
+  void _emergency()async{
+   await emergencyService.requestPermissions();
+   await emergencyService.getCurrentLocation();
+   bool? res = await FlutterPhoneDirectCaller.callNumber('9579483461');
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
-    print(user.toJson());
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -33,17 +46,23 @@ class _Home1State extends State<Home1> {
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
-                      Text(
+                      const Text(
                         "Find your desire \nhealth solution",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 120,
                       ),
-                      Icon(
-                        Icons.notifications_active_outlined,
-                        size: 30,
+                      GestureDetector(
+                        onTap: (){
+                          _emergency();
+                        },
+                        child: const Icon(
+                          Icons.alarm_on,
+                          size: 30,
+                          
+                        ),
                       ),
                     ],
                   ),
@@ -79,7 +98,7 @@ class _Home1State extends State<Home1> {
                       CustomContainer(
                         text: 'Ambulance',
                         imagePath: 'assets/Ambulance.png',
-                        routeName:'/ambulance', // Replace '/ambulance' with the actual named route
+                        routeName:'/symptom', // Replace '/ambulance' with the actual named route
                       ),
                     ],
                   ),
@@ -92,13 +111,13 @@ class _Home1State extends State<Home1> {
                     // Add your button action here
                   },
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 18, right: 5),
+                const Padding(
+                  padding: EdgeInsets.only(top: 15, left: 18, right: 5),
                   child: SizedBox(
                     width: 383,
                     child: Column(
                       children: [
-                        const Row(
+                        Row(
                           children: [
                             Text(
                               "Top Doctors",
@@ -116,49 +135,49 @@ class _Home1State extends State<Home1> {
                             )
                           ],
                         ),
-                        Text(user.name),
+                       
                         // HorizontalDoctorList(),
                       ],
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 18, right: 5),
-                  child: SizedBox(
-                    width: 383,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Health Articles",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, Home.routeName);
-                              },
-                              child: Text(
-                                "See All",
-                                style: TextStyle(
-                                  color: shadowColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(user.name),
-                        // HorizontalDoctorList(),
-                          VertHome(),
-                      ],
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 15, left: 18, right: 5),
+                //   child: SizedBox(
+                //     width: 383,
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             Text(
+                //               "Health Articles",
+                //               style: TextStyle(
+                //                   fontSize: 20, fontWeight: FontWeight.bold),
+                //             ),
+                //             GestureDetector(
+                //               onTap: () {
+                //                 Navigator.pushNamed(
+                //                     context, Home.routeName);
+                //               },
+                //               child: Text(
+                //                 "See All",
+                //                 style: TextStyle(
+                //                   color: shadowColor,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //         Text(user.name),
+                //         // HorizontalDoctorList(),
+                //           VertHome(),
+                //       ],
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
