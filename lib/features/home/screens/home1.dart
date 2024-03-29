@@ -141,6 +141,7 @@ class _Home1State extends State<Home1> {
                     ),
                   ),
                 ),
+
                 // Padding(
                 //   padding: const EdgeInsets.only(top: 15, left: 18, right: 5),
                 //   child: SizedBox(
@@ -178,6 +179,45 @@ class _Home1State extends State<Home1> {
                 //     ),
                 //   ),
                 // ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 15, left: 18, right: 5),
+                  child: SizedBox(
+                    width: 383,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Health Articles",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, Home.routeName);
+                              },
+                              child: const Text(
+                                "See All",
+                                style: TextStyle(
+                                  color: shadowColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Text(user.name),
+                        // HorizontalDoctorList(),
+                        //   VertHome(),
+                      ],
+                    ),
+                  ),
+                ),
+
               ],
             ),
           ),
