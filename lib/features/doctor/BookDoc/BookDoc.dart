@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class BookingPage extends StatefulWidget {
+  static const String routeName = '/appointment';
   const BookingPage({Key? key}) : super(key: key);
 
   @override

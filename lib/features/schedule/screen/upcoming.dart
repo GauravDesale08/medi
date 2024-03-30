@@ -1,64 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:medihub/features/schedule/models/appointment.dart';
+import 'package:medihub/features/schedule/services/scheduleServices.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Updated API response class
-class Appointment {
-  final String doctorName;
-  final String doctorSpecialization;
-  final String appointmentDate;
-  final String appointmentTime;
-  final String imageUrl;
-  final bool isConfirmed;
 
-  Appointment({
-    required this.doctorName,
-    required this.doctorSpecialization,
-    required this.appointmentDate,
-    required this.appointmentTime,
-    required this.imageUrl,
-    required this.isConfirmed,
-  });
-}
-
-class UpcomingAppointments extends StatelessWidget {
+class UpcomingAppointments extends StatefulWidget {
   const UpcomingAppointments({Key? key}) : super(key: key);
 
   @override
+  State<UpcomingAppointments> createState() => _UpcomingAppointmentsState();
+}
+
+class _UpcomingAppointmentsState extends State<UpcomingAppointments> {
+
+   List<Appointment>? appointments;
+    String? authToken;
+    final ScheduleServices scheduleServices = ScheduleServices();
+
+    void fetchToken() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    authToken = sharedPreferences.getString('x-auth-token');
+    if (authToken != null) {
+      fetchAppointments(authToken!);
+    }
+    // Get the token from shared preferences
+  }
+
+  fetchAppointments (String authToken)async{
+
+    appointments = await scheduleServices.getAppointments(authToken);
+
+    setState(() {
+      
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchToken();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<Appointment> appointments = [
-      Appointment(
-        doctorName: 'Dr. Marcus Horizon',
-        doctorSpecialization: 'Cardiologist',
-        appointmentDate: '26/06/2022',
-        appointmentTime: '10:30 AM',
-        imageUrl: 'https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg',
-        isConfirmed: true,
-      ),
-      Appointment(
-        doctorName: 'Dr. Jane Doe',
-        doctorSpecialization: 'Neurologist',
-        appointmentDate: '30/06/2022',
-        appointmentTime: '09:00 AM',
-        imageUrl: 'https://img.freepik.com/free-photo/portrait-handsome-young-doctor-looking-camera-smiling_176420-6220.jpg',
-        isConfirmed: false,
-      ),
-      Appointment(
-        doctorName: 'Dr. Alex Smith',
-        doctorSpecialization: 'Dermatologist',
-        appointmentDate: '02/07/2022',
-        appointmentTime: '11:45 AM',
-        imageUrl: 'https://img.freepik.com/free-photo/doctor-with-stethoscope-around-neck_1154-19869.jpg',
-        isConfirmed: true,
-      ),
-    ];
+    // List<Appointment> appointments = [
+    //   Appointment(
+    //     doctorName: 'Dr. Marcus Horizon',
+    //     doctorSpecialization: 'Cardiologist',
+    //     appointmentDate: '26/06/2022',
+    //     appointmentTime: '10:30 AM',
+    //     imageUrl: 'https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg',
+    //     isConfirmed: true,
+    //   ),
+    //   Appointment(
+    //     doctorName: 'Dr. Jane Doe',
+    //     doctorSpecialization: 'Neurologist',
+    //     appointmentDate: '30/06/2022',
+    //     appointmentTime: '09:00 AM',
+    //     imageUrl: 'https://img.freepik.com/free-photo/portrait-handsome-young-doctor-looking-camera-smiling_176420-6220.jpg',
+    //     isConfirmed: false,
+    //   ),
+    //   Appointment(
+    //     doctorName: 'Dr. Alex Smith',
+    //     doctorSpecialization: 'Dermatologist',
+    //     appointmentDate: '02/07/2022',
+    //     appointmentTime: '11:45 AM',
+    //     imageUrl: 'https://img.freepik.com/free-photo/doctor-with-stethoscope-around-neck_1154-19869.jpg',
+    //     isConfirmed: true,
+    //   ),
+    // ]
+
+    
+
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Upcoming Appointments'),
       ),
-      body: ListView.builder(
-        itemCount: appointments.length,
+      body: appointments == null ? Center(child: CircularProgressIndicator(),) : ListView.builder(
+        itemCount: appointments!.length,
         itemBuilder: (context, index) {
-          return buildAppointmentItem(appointments[index]);
+          return buildAppointmentItem(appointments![index]);
         },
       ),
     );
@@ -89,14 +112,14 @@ class UpcomingAppointments extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    appointment.doctorSpecialization,
+                    appointment.doctorCategory,
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],
               ),
               SizedBox(width: 110),
               CircleAvatar(
-                backgroundImage: NetworkImage(appointment.imageUrl),
+                backgroundImage: NetworkImage(appointment.doctorImage),
                 radius: 30,
               ),
             ],
@@ -106,7 +129,7 @@ class UpcomingAppointments extends StatelessWidget {
             children: [
               Icon(Icons.calendar_month),
               Text(
-                ' ${appointment.appointmentDate}',
+                ' ${appointment.date}',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(width: 20),
@@ -114,7 +137,7 @@ class UpcomingAppointments extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    ' ${appointment.appointmentTime}',
+                    ' ${appointment.timeslot}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

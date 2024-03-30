@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medihub/features/doctor/catDoctor/screens/doctor_details.dart';
+import 'package:medihub/features/doctor/DocDetail/DocDetailScreen.dart';
 import 'package:medihub/models/doctor.dart';
 import 'package:medihub/features/doctor/services/doctorService.dart';
 
@@ -44,7 +44,7 @@ class _DoctorVerticalState extends State<DoctorVertical> {
         return GestureDetector(
           onTap: (){
             String doctId = doctor.doctId!;
-            Navigator.pushNamed(context, DoctorDetails.routeName,arguments:  doctId );
+            Navigator.pushNamed(context, DoctorDetail.routeName,arguments:  doctId );
           },
           child: Card(
             elevation: 2,

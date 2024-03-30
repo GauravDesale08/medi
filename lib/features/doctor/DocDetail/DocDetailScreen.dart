@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:medihub/features/doctor/BookDoc/BookDoc.dart';
+import 'package:medihub/features/doctor/models/freeTimeSlots.dart';
+
+import 'package:medihub/features/doctor/services/doctorService.dart';
+import 'package:medihub/models/doctor.dart';
+
 
 class DoctorDetail extends StatefulWidget {
-  const DoctorDetail({Key? key}) : super(key: key);
+  static const String routeName = '/doctor-detail';
+  final String doctId;
+  const DoctorDetail({Key? key,required this.doctId}) : super(key: key);
 
   @override
   State<DoctorDetail> createState() => _DoctorDetailState();
@@ -12,28 +21,62 @@ class _DoctorDetailState extends State<DoctorDetail> {
   int selectedDateIndex = -1;
   int selectedTimeIndex = -1;
 
+  late DateTime _selectedDate;
+
+  Doctor? doctor;
+  final DoctorService doctorService = DoctorService();
+
+  List<FreeTimeSlot>? timeslots;
+  
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = DateTime.now();
+    fetchDoctorDetails(widget.doctId);
+    fetchFreeTimeSlots(widget.doctId);
+  }
+
+  fetchDoctorDetails(String doctId)async{
+
+    doctor = await doctorService.getDoctorDetails(doctId: doctId, context: context);
+
+    setState(() {
+      
+    });
+  }
+
+  fetchFreeTimeSlots(String doctId) async{
+
+    timeslots = await doctorService.fetchFreeTimeSlots(doctId);
+    print(timeslots);
+    setState(() {
+      
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    List<String> days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-    List<String> dates = ['24', '25', '26', '27', '28', '29', '30'];
-    List<String> timeSlots = [
-      '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM',
-      '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM'
-    ];
+    // List of weekdays and dates
+    List<String> weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    List<DateTime> dates = List.generate(7, (index) {
+      // Generate dates for the next 7 days
+      return DateTime.now().add(Duration(days: index));
+    });
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Doctor Detail'),
+        title: const Text('Doctor Detail'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: doctor == null ? const Center(child: CircularProgressIndicator()) : SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Doctor details container (same as before)
-              Material(
+               Material(
                 elevation: 4,
                 borderRadius: BorderRadius.circular(8),
                 child: Container(
@@ -43,7 +86,7 @@ class _DoctorDetailState extends State<DoctorDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.network(
-                        'https://via.placeholder.com/150',
+                        doctor!.doctImage!,
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -53,15 +96,15 @@ class _DoctorDetailState extends State<DoctorDetail> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Dr. Name',
-                            style: TextStyle(
+                            doctor!.doctName!,
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text('Position'),
-                          Text('Rating'),
-                          Text('Distance'),
+                          Text(doctor!.doctCategory!),
+                          const Text('4.5'),
+                          const Text('800m'),
                         ],
                       ),
                     ],
@@ -70,7 +113,7 @@ class _DoctorDetailState extends State<DoctorDetail> {
               ),
 
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'Select Day and Date',
                 style: TextStyle(
                   fontSize: 18,
@@ -78,40 +121,39 @@ class _DoctorDetailState extends State<DoctorDetail> {
                 ),
               ),
 
-              // Horizontal list of selectable day and date cards
+              // ListView builder to display weekday and date
               Container(
                 height: 80,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: days.length,
+                  itemCount: 7,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedDayIndex = index;
-                          selectedDateIndex = index;
-                          selectedTimeIndex = -1; // Reset selected time
+                          // Update the selected date
+                          _selectedDate = dates[index];
                         });
                       },
                       child: Card(
-                        color: selectedDayIndex == index ? Colors.blue : null,
+                        color: _selectedDate.day == dates[index].day ? Colors.blue : null,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                days[index],
+                                weekdays[dates[index].weekday - 1], // Adjust index to match the weekday
                                 style: TextStyle(
-                                  color: selectedDayIndex == index ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.bold,
+                                  color: _selectedDate.day == dates[index].day ? Colors.white : Colors.black,
                                 ),
                               ),
                               Text(
-                                dates[index],
+                                DateFormat('dd-MM-yyyy').format(dates[index]), // Format the date as dd-mm-yyyy
                                 style: TextStyle(
-                                  color: selectedDateIndex == index ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.bold,
+                                  color: _selectedDate.day == dates[index].day ? Colors.white : Colors.black,
                                 ),
                               ),
                             ],
@@ -123,10 +165,10 @@ class _DoctorDetailState extends State<DoctorDetail> {
                 ),
               ),
 
-              Divider(),
+              const Divider(),
 
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'Select Time Slot',
                 style: TextStyle(
                   fontSize: 18,
@@ -135,57 +177,57 @@ class _DoctorDetailState extends State<DoctorDetail> {
               ),
 
               // List of selectable time slot cards in rows of three
-              GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 8,
-                  childAspectRatio: 2, // Aspect ratio for smaller cards
-                ),
-                itemCount: timeSlots.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedTimeIndex = index;
-                      });
-                    },
-                    child: Card(
-                      color: selectedTimeIndex == index ? Colors.blue : null,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Center(
-                          child: Text(
-                            timeSlots[index],
-                            style: TextStyle(
-                              color: selectedTimeIndex == index ? Colors.white : Colors.black,
-                              fontWeight: FontWeight.bold,
+              
+              timeslots == null ? Center(child: CircularProgressIndicator()) : GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 2, // Aspect ratio for smaller cards
+                    ),
+                    itemCount: timeslots!.length,
+                    itemBuilder: (context, index) {
+                      final timeSlot = timeslots![index];
+                      return GestureDetector(
+                        onTap: () {
+                          // Add logic to select time slot
+                        },
+                        child: Card(
+                          color: Colors.blue,
+                          child: Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Center(
+                              child: Text(
+                                '${timeSlot.startTime} - ${timeSlot.endTime}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                  ),
 
               const SizedBox(height: 16),
 
               // Book Appointment button
               TextButton(
                 onPressed: () {
-                  // Add logic to book appointment
+                  Navigator.pushNamed(context, BookingPage.routeName);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Book Appointment',
                   style: TextStyle(
                     color: Colors.white,

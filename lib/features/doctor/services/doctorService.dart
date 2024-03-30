@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:medihub/features/doctor/models/freeTimeSlots.dart';
 import 'package:medihub/models/doctor.dart';
 import 'package:medihub/utils/helper.dart';
 
@@ -55,6 +56,23 @@ class DoctorService {
       throw Exception('Error fetching doctor details: $e');
     }
   }
+
+  Future<List<FreeTimeSlot>> fetchFreeTimeSlots(String doctorId) async {
+  final response = await http.get(Uri.parse('$uri/api/free-slots?doctorId=$doctorId'));
+  // Replace API_URL_HERE with the actual API URL for fetching free time slots
+  print(response.body.toString());
+
+  if (response.statusCode == 200) {
+    // If the server returns a 200 OK response, parse the JSON
+    final List<dynamic> data = jsonDecode(response.body)['freeTimeSlots'];
+    // Map the JSON data to FreeTimeSlot objects using the factory method
+    return data.map((e) => FreeTimeSlot.fromJson(e)).toList();
+  } else {
+    // If the server did not return a 200 OK response, throw an exception
+    throw Exception('Failed to load free time slots');
+  }
+}
+
   
 
 }
