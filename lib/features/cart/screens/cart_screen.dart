@@ -1,25 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:medihub/features/pharmacy/services/cartModel.dart';
+import 'package:medihub/features/cart/models/cart.dart';
+import 'package:medihub/features/cart/services/cart_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-Future<List<CartItem>> fetchCartItems() async {
-  final response = await http.get(Uri.parse('https://api.example.com/cart'));
 
-  if (response.statusCode == 200) {
-    final List<dynamic> data = jsonDecode(response.body);
-    return data
-        .map((item) => CartItem(
-              name: item['name'],
-              weight: item['weight'],
-              price: item['price'].toDouble(),
-              imageUrl: item['imageUrl'],
-            ))
-        .toList();
-  } else {
-    throw Exception('Failed to load cart items');
-  }
-}
 
 class PharmacyCart extends StatefulWidget {
   const PharmacyCart({Key? key}) : super(key: key);
@@ -31,12 +17,32 @@ class PharmacyCart extends StatefulWidget {
 }
 
 class _PharmacyCartState extends State<PharmacyCart> {
-  late Future<List<CartItem>> _fetchCartItems;
+
+  Cart? fetchedCart ;
+  final CartServices cartServices = CartServices();
+  String? authToken;
 
   @override
   void initState() {
     super.initState();
-    _fetchCartItems = fetchCartItems();
+   fetchToken();
+   fetcheUserCart();
+  }
+
+  void fetchToken() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    authToken = sharedPreferences.getString('x-auth-token');
+    print(authToken);
+    // Get the token from shared preferences
+  }
+
+  void fetcheUserCart()async{
+  
+    fetchedCart = await cartServices.fetchCartDetails(authToken);
+    print(fetchedCart);
+    setState(() {
+      
+    });
   }
 
   @override
@@ -46,22 +52,15 @@ class _PharmacyCartState extends State<PharmacyCart> {
         title: const Text('My Cart'),
         centerTitle: true,
       ),
-      body: FutureBuilder<List<CartItem>>(
-        future: _fetchCartItems,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final List<CartItem> cartItems = snapshot.data!;
-            return Column(
+      body: fetchedCart == null
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
               children: [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: cartItems.length,
+                    itemCount: fetchedCart!.userCart.length,
                     itemBuilder: (context, index) {
-                      final item = cartItems[index];
+                      final item = fetchedCart!.userCart[index];
                       return Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
@@ -75,7 +74,7 @@ class _PharmacyCartState extends State<PharmacyCart> {
                               Row(
                                 children: [
                                   Image.network(
-                                    item.imageUrl,
+                                    item.pharmacy.medImage,
                                     height: 100,
                                     width: 100,
                                     fit: BoxFit.cover,
@@ -83,18 +82,16 @@ class _PharmacyCartState extends State<PharmacyCart> {
                                   const SizedBox(width: 10),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          item.name,
+                                          item.pharmacy.medName,
                                           style: const TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text(item.weight),
-                                        Text(
-                                            '\$${item.price.toStringAsFixed(2)}'),
+                                        Text(item.pharmacy.medQuantity.toString()),
+                                        Text('\$${item.pharmacy.medPrice.toStringAsFixed(2)}'),
                                       ],
                                     ),
                                   ),
@@ -113,7 +110,7 @@ class _PharmacyCartState extends State<PharmacyCart> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    '\$${item.price.toStringAsFixed(2)}',
+                                    '\$${item.pharmacy.medPrice.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -135,7 +132,7 @@ class _PharmacyCartState extends State<PharmacyCart> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Total: \$100',
+                        'Total: \$100', // You can calculate the total based on the fetchedCart
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       ElevatedButton(
@@ -148,10 +145,7 @@ class _PharmacyCartState extends State<PharmacyCart> {
                   ),
                 ),
               ],
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 }

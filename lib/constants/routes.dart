@@ -10,7 +10,7 @@ import 'package:medihub/features/exercises/screens/exercises_list.dart';
 import 'package:medihub/features/exercises/screens/exercises_types.dart';
 import 'package:medihub/features/news/pages/home.dart';
 import 'package:medihub/features/news/pages/vertHome.dart';
-import 'package:medihub/features/pharmacy/screens/cart.dart';
+import 'package:medihub/features/cart/screens/cart_screen.dart';
 import 'package:medihub/features/pharmacy/screens/productSelected.dart';
 import 'package:medihub/features/pharmacy/screens/verticalList.dart';
 import 'package:medihub/features/home/screens/home.dart';

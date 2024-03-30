@@ -1,7 +1,10 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+// import 'package:flutter_sms/flutter_sms.dart';
 import 'package:medihub/constants/colors.dart';
 import 'package:medihub/features/emergency/screens/emergency_screen.dart';
 import 'package:medihub/features/emergency/services/emergency_services.dart';
@@ -21,15 +24,38 @@ class Home1 extends StatefulWidget {
 }
 
 class _Home1State extends State<Home1> {
-  final EmergencyServices  emergencyService = EmergencyServices();
+  final EmergencyServices  emergencyServices = EmergencyServices();
 
 
-  void _emergency()async{
-   await emergencyService.requestPermissions();
-   await emergencyService.getCurrentLocation();
-   bool? res = await FlutterPhoneDirectCaller.callNumber('9579483461');
+ void emergency() async {
 
+    await emergencyServices.getCurrentLocation();
+    bool? res = await FlutterPhoneDirectCaller.callNumber('+919579483461');
+    print(res);
+    // Accessing _currentLocation using the getter method
+    final locationData = emergencyServices.getCurrentLocationData();
+
+    if (locationData != null) {
+      double? latitude = locationData.latitude;
+      double? longitude = locationData.longitude;
+
+      final address = await emergencyServices.getAddress(latitude, longitude);
+
+      if (address != null) {
+        print('Emergency at: $address');
+        List<String> recipients = ["+919579483461"];
+        String message = "Emergency at: $address";
+        // sendSMS(message: message, recipients: recipients,sendDirect: true);
+        //Perform actions with the obtained address
+      } else {
+        print('Failed to get address');
+      }
+    } else {
+      print('Failed to get current location');
+    }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +82,7 @@ class _Home1State extends State<Home1> {
                       ),
                       GestureDetector(
                         onTap: (){
-                          _emergency();
+                          emergency();
                         },
                         child: const Icon(
                           Icons.alarm_on,

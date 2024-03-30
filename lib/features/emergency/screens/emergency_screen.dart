@@ -40,6 +40,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     }
 
     _currentLocation = await locationService.getLocation();
+    print(_currentLocation);
     // After obtaining location, you can use _currentLocation as needed
     setState(() {}); // Trigger a rebuild to update UI with the obtained location
   }
@@ -58,7 +59,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
           onPressed: () {
             requestPermissions();
             getCurrentLocation(); // Call method to get current location// Make emergency call to 911 (or your local emergency number)
-            
+
           },
           child: Text("Emergency"),
         ),

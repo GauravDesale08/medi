@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medihub/constants/colors.dart';
-import 'package:medihub/features/pharmacy/screens/cart.dart';
+import 'package:medihub/features/cart/services/cart_services.dart';
+import 'package:medihub/features/cart/screens/cart_screen.dart';
 import 'package:medihub/features/pharmacy/services/pharmacy_services.dart';
 import 'package:medihub/features/pharmacy/services/productModel.dart';
 import 'package:medihub/utils/splash.dart';
@@ -39,6 +40,7 @@ class _ProductSelectedState extends State<ProductSelected> {
 
   Pharmacy? pharmacy;
   final PharmacyServices pharmacyServices = PharmacyServices();
+  final CartServices cartServices = CartServices();
   String? authToken;
 
   @override
@@ -63,7 +65,7 @@ class _ProductSelectedState extends State<ProductSelected> {
 
 
   void addPharmacyToCart(String productId, String authToken) async {
-  await pharmacyServices.addToCart(productId,authToken);
+  await cartServices.addToCart(authToken,productId);
 
 }
 
