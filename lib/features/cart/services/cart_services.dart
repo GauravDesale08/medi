@@ -20,7 +20,6 @@ class CartServices{
   Map<String, dynamic> body = {'id': productId};
 
   try {
-    
     // Send the POST request
     final response = await http.post(
       Uri.parse(apiUrl),

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:latlong2/latlong.dart';
 // import 'package:flutter_sms/flutter_sms.dart';
 import 'package:medihub/constants/colors.dart';
 import 'package:medihub/features/emergency/screens/emergency_screen.dart';
@@ -25,31 +26,52 @@ class Home1 extends StatefulWidget {
 
 class _Home1State extends State<Home1> {
   final EmergencyServices  emergencyServices = EmergencyServices();
+  List<Hospital>? fetchList;
+
 
 
  void emergency() async {
 
     await emergencyServices.getCurrentLocation();
-    bool? res = await FlutterPhoneDirectCaller.callNumber('+919579483461');
-    print(res);
+    // bool? res = await FlutterPhoneDirectCaller.callNumber('+919579483461');
+    // print(res);
     // Accessing _currentLocation using the getter method
     final locationData = emergencyServices.getCurrentLocationData();
+    print(locationData);
 
     if (locationData != null) {
       double? latitude = locationData.latitude;
       double? longitude = locationData.longitude;
 
+      final userlocation = LatLng(latitude!, longitude!);
+
+      print('$latitude $longitude');
+
+      try {
+
+      fetchList = await emergencyServices.fetchNearbyHospitals(userlocation);
+
+
+
+      }catch(e){
+        print("Fetch hospital error $e");
+      }
+
+      print(" listvalue: $fetchList");
+
       final address = await emergencyServices.getAddress(latitude, longitude);
 
-      if (address != null) {
-        print('Emergency at: $address');
-        List<String> recipients = ["+919579483461"];
-        String message = "Emergency at: $address";
-        // sendSMS(message: message, recipients: recipients,sendDirect: true);
-        //Perform actions with the obtained address
-      } else {
-        print('Failed to get address');
-      }
+      // if (address != null) {
+      //   print('Emergency at: $address');
+      //   List<String> recipients = ["+919579483461"];
+      //   String message = "Emergency at: $address";
+      
+      // } else {
+      //   print('Failed to get address');
+      // }
+
+
+
     } else {
       print('Failed to get current location');
     }
@@ -59,7 +81,6 @@ class _Home1State extends State<Home1> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context).user;
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -82,7 +103,8 @@ class _Home1State extends State<Home1> {
                       ),
                       GestureDetector(
                         onTap: (){
-                          emergency();
+                          // emergency();
+                          Navigator.pushNamed(context, EmergencyScreen.routeName);
                         },
                         child: const Icon(
                           Icons.alarm_on,
@@ -236,7 +258,7 @@ class _Home1State extends State<Home1> {
                             ),
                           ],
                         ),
-                        Text(user.name),
+                        
                         // HorizontalDoctorList(),
                         //   VertHome(),
                       ],

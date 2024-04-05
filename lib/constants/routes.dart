@@ -8,6 +8,8 @@ import 'package:medihub/features/doctor/catDoctor/screens/doctor_details.dart';
 import 'package:medihub/features/doctor/catDoctor/screens/doctor_vertical.dart';
 import 'package:medihub/features/doctor/doctor.dart';
 import 'package:medihub/features/emergency/screens/emergency_screen.dart';
+import 'package:medihub/features/emergency/screens/hospital_map.dart';
+import 'package:medihub/features/emergency/services/emergency_services.dart';
 import 'package:medihub/features/exercises/screens/exercises_list.dart';
 import 'package:medihub/features/exercises/screens/exercises_types.dart';
 import 'package:medihub/features/news/pages/home.dart';
@@ -120,7 +122,11 @@ class Routes {
       case BookingPage.routeName:
         return CupertinoPageRoute(builder: (context) => const BookingPage()); 
 
-      
+      case HospitalMap.routeName:
+        final hospitals = settings.arguments as List<Hospital>;
+        return CupertinoPageRoute(
+          builder: (context) => HospitalMap(hospitals: hospitals)
+        );
 
       // case SplashScreen.routeName: return CupertinoPageRoute(
       //   builder: (context) => const SplashScreen()

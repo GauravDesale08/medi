@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:medihub/features/emergency/services/emergency_services.dart';
 import 'package:permission_handler/permission_handler.dart' as permission_handler;
 import 'package:location/location.dart' as location;
 import 'package:url_launcher/url_launcher.dart';
@@ -12,39 +14,64 @@ class EmergencyScreen extends StatefulWidget {
 }
 
 class _EmergencyScreenState extends State<EmergencyScreen> {
-  location.LocationData? _currentLocation;
 
-  Future<void> requestPermissions() async {
-    await permission_handler.Permission.location.request();
-    await permission_handler.Permission.phone.request();
+  final EmergencyServices  emergencyServices = EmergencyServices();
+  List<Hospital>? fetchList;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchHospitals();
   }
 
-  Future<void> getCurrentLocation() async {
-    var locationService = location.Location();
-    bool serviceEnabled = await locationService.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await locationService.requestService();
-      if (!serviceEnabled) {
-        // Handle if user denies enabling location services
-        return;
+  void fetchHospitals() async{
+
+    await emergencyServices.getCurrentLocation();
+    // bool? res = await FlutterPhoneDirectCaller.callNumber('+919579483461');
+    // print(res);
+    // Accessing _currentLocation using the getter method
+    final locationData = emergencyServices.getCurrentLocationData();
+    print(locationData);
+
+    if (locationData != null) {
+      double? latitude = locationData.latitude;
+      double? longitude = locationData.longitude;
+
+      final userlocation = LatLng(latitude!, longitude!);
+
+      print('$latitude $longitude');
+
+      try {
+
+      fetchList = await emergencyServices.fetchNearbyHospitals(userlocation);
+
+
+
+      }catch(e){
+        print("Fetch hospital error $e");
       }
+
+      print(" listvalue: $fetchList");
+
+      final address = await emergencyServices.getAddress(latitude, longitude);
+
+      // if (address != null) {
+      //   print('Emergency at: $address');
+      //   List<String> recipients = ["+919579483461"];
+      //   String message = "Emergency at: $address";
+      
+      // } else {
+      //   print('Failed to get address');
+      // }
+
+
+
+    } else {
+      print('Failed to get current location');
     }
 
-    var permission = await permission_handler.Permission.location.status;
-    if (permission != permission_handler.PermissionStatus.granted) {
-      permission = await permission_handler.Permission.location.request();
-      if (permission != permission_handler.PermissionStatus.granted) {
-        // Handle if user denies location permission
-        return;
-      }
-    }
-
-    _currentLocation = await locationService.getLocation();
-    print(_currentLocation);
-    // After obtaining location, you can use _currentLocation as needed
-    setState(() {}); // Trigger a rebuild to update UI with the obtained location
   }
-
 
 
   @override
@@ -56,9 +83,7 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
-            requestPermissions();
-            getCurrentLocation(); // Call method to get current location// Make emergency call to 911 (or your local emergency number)
+          onPressed: () { // Call method to get current location// Make emergency call to 911 (or your local emergency number)
 
           },
           child: Text("Emergency"),
