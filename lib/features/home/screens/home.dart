@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medihub/features/chat/screen/chat.dart';
 import 'package:medihub/constants/colors.dart';
+import 'package:medihub/features/news/pages/home.dart';
 import 'package:medihub/features/schedule/screen/schedule.dart';
 import 'package:medihub/features/home/screens/home1.dart';
 import 'package:medihub/features/profile/screens/profile.dart';
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     // Replace these with your actual pages
     Home1(),
-    Chat(),
+    Home(),
     Schedule(),
     ProfileTwoPage(),
   ];
