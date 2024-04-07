@@ -25,7 +25,7 @@ class _DoctorVerticalState extends State<DoctorVertical> {
   }
 
   fetchDoctorsByCategory(String doctCategory)async{
-
+    print("hey");
     doctorList = await doctorService.fetchDoctorsByCategory(doctCategory);
     setState(() {
       

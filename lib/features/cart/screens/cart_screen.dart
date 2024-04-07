@@ -25,127 +25,137 @@ class _PharmacyCartState extends State<PharmacyCart> {
   @override
   void initState() {
     super.initState();
-   fetchToken();
    fetcheUserCart();
   }
 
-  void fetchToken() async {
+  void fetcheUserCart()async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     authToken = sharedPreferences.getString('x-auth-token');
-    print(authToken);
-    // Get the token from shared preferences
-  }
-
-  void fetcheUserCart()async{
-  
-    fetchedCart = await cartServices.fetchCartDetails(authToken);
+    if(authToken!=null)
+    {
+      fetchedCart = await cartServices.fetchCartDetails(authToken);
     print(fetchedCart);
     setState(() {
-      
+           
     });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Cart'),
-        centerTitle: true,
-      ),
-      body: fetchedCart == null
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: fetchedCart!.userCart.length,
-                    itemBuilder: (context, index) {
-                      final item = fetchedCart!.userCart[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(8.0),
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('My Cart'),
+      centerTitle: true,
+    ),
+    body: fetchedCart == null
+      ? const Center(child: CircularProgressIndicator())
+      : Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: fetchedCart!.userCart.length,
+              itemBuilder: (context, index) {
+                final item = fetchedCart!.userCart[index];
+                return Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Image.network(
+                              item.pharmacy.medImage,
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.contain,
+                            ),
                           ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          flex: 2,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Image.network(
-                                    item.pharmacy.medImage,
-                                    height: 100,
-                                    width: 100,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          item.pharmacy.medName,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(item.pharmacy.medQuantity.toString()),
-                                        Text('\$${item.pharmacy.medPrice.toStringAsFixed(2)}'),
-                                      ],
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  IconButton(
-                                    onPressed: () {
-                                      // Implement delete logic
-                                    },
-                                    icon: const Icon(Icons.delete),
-                                  ),
-                                ],
+                              Text(
+                                item.pharmacy.medName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
                               ),
-                              const SizedBox(height: 10),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    '\$${item.pharmacy.medPrice.toStringAsFixed(2)}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                              const SizedBox(height: 5),
+                              Text(
+                                "${item.pharmacy.medQuantity}ml",
+                                style: TextStyle(
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                '\₹${item.pharmacy.medPrice.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.green,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                'Quantity : ${item.quantity}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.black,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      );
-                    },
+                        IconButton(
+                          onPressed: () {
+                            // Implement delete logic
+                          },
+                          icon: const Icon(Icons.delete),
+                        ),
+                      ],
+                    ),
                   ),
+                );
+              },
+            ),
+          ),
+          Container(
+            height: 100,
+            color: Colors.grey[200],
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total: \$100', // You can calculate the total based on the fetchedCart
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
-                Container(
-                  height: 100,
-                  color: Colors.grey[200],
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total: \$100', // You can calculate the total based on the fetchedCart
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Implement payment logic
-                        },
-                        child: const Text('Pay'),
-                      ),
-                    ],
-                  ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Implement payment logic
+                  },
+                  child: const Text('Pay', style: TextStyle(fontSize: 18)),
                 ),
               ],
             ),
-    );
-  }
+          ),
+        ],
+      ),
+  );
+}
+
 }

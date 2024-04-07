@@ -1,17 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:medihub/features/doctor/BookDoc/BookDocServices.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BookingPage extends StatefulWidget {
   static const String routeName = '/appointment';
-  const BookingPage({Key? key}) : super(key: key);
+  final String doctId;
+  final String doctName ;
+  final String doctCategory ;
+  final String doctImage ;
+  final String date;
+  final String startTime;
+  final String timeslotId;
+  const BookingPage({Key? key, required this.doctId, required this.doctName, required this.doctCategory, required this.doctImage, required this.date,required this.timeslotId,required this.startTime}) : super(key: key);
 
   @override
   _BookingPageState createState() => _BookingPageState();
 }
 
 class _BookingPageState extends State<BookingPage> {
+
+  final BookDocServices bookDocServices = BookDocServices();
+  bool isSuccessfull = false;
+  String? authToken;
 
   late Razorpay _razorpay;
 
@@ -64,13 +77,20 @@ class _BookingPageState extends State<BookingPage> {
         timeInSecForIosWeb: 4);
   }
 
-
+  bookAppointmentHelper(String doctorId,String timeslotId,String date)async{
+    print(doctorId);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    authToken = sharedPreferences.getString('x-auth-token');
+    isSuccessfull = await bookDocServices.bookappointments(authToken, doctorId, timeslotId, date);
+    print(isSuccessfull);
+  }
 
   String selectedDate = '';
   String selectedTime = '';
-
   @override
   Widget build(BuildContext context) {
+    print(widget.doctId);
+    print(widget.timeslotId);
     return Scaffold(
       appBar: AppBar(
         title: Text('Appointment'),
@@ -106,7 +126,7 @@ class _BookingPageState extends State<BookingPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.network(
-                            'https://via.placeholder.com/150',
+                            widget.doctImage!,
                             width: 100,
                             height: 100,
                             fit: BoxFit.cover,
@@ -116,15 +136,15 @@ class _BookingPageState extends State<BookingPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Dr. Name',
+                               widget.doctName!,
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              Text('Position'),
-                              Text('Rating'),
-                              Text('Distance'),
+                              Text(widget.doctCategory),
+                              Text('4.5'),
+                              Text('800m'),
                             ],
                           ),
                         ],
@@ -143,8 +163,25 @@ class _BookingPageState extends State<BookingPage> {
                     Row(
                       children: [
                         Icon(Icons.calendar_month),
+                        SizedBox(width: 8),
                         Text(
-                          ' Wednesday, Jun 23, 2021 | 10:00 AM',
+                          widget.date,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(width: 8,),
+                        Text(
+                          '|',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(width: 8,),
+                        Text(
+                          widget.startTime,
+                          style: TextStyle(fontSize: 16),
+                        ),
+
+                        SizedBox(width: 8,),
+                        Text(
+                          "AM",
                           style: TextStyle(fontSize: 16),
                         ),
                       ],
@@ -164,7 +201,7 @@ class _BookingPageState extends State<BookingPage> {
                       children: [
                         Icon(Icons.format_indent_increase_outlined),
                         Text(
-                          ' Reason for appointment',
+                          ' Normal Checkup ',
                           style: TextStyle(fontSize: 16),
                         ),
                       ],
@@ -216,10 +253,10 @@ class _BookingPageState extends State<BookingPage> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
+       bottomNavigationBar: Container(
         height: 80,
         padding: EdgeInsets.all(16),
-        color: Colors.blue,
+        color:  Colors.blue,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -246,6 +283,7 @@ class _BookingPageState extends State<BookingPage> {
             ElevatedButton(
               onPressed: () {
                 openPaymentPortal();
+                // bookAppointmentHelper(widget.doctId, widget.timeslotId, widget.date);
               },
               child: Text('Pay Now'),
             ),

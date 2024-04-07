@@ -109,7 +109,7 @@ class Routes {
         );
 
       case EmergencyScreen.routeName:
-        return CupertinoPageRoute(builder: (context) => const EmergencyScreen());  
+        return CupertinoPageRoute(builder: (context) => EmergencyScreen());  
 
 
       case Home.routeName:
@@ -119,8 +119,8 @@ class Routes {
       case VertHome.routeName:
         return CupertinoPageRoute(builder: (context) => const VertHome());   
 
-      case BookingPage.routeName:
-        return CupertinoPageRoute(builder: (context) => const BookingPage()); 
+      // case BookingPage.routeName:
+      //   return CupertinoPageRoute(builder: (context) => const BookingPage()); 
 
       case HospitalMap.routeName:
         final hospitals = settings.arguments as List<Hospital>;

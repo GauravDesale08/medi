@@ -3,11 +3,12 @@ import 'package:latlong2/latlong.dart';
 import 'package:medihub/features/emergency/services/emergency_services.dart';
 import 'package:permission_handler/permission_handler.dart' as permission_handler;
 import 'package:location/location.dart' as location;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EmergencyScreen extends StatefulWidget {
   static const String routeName = '/emergency';
-  const EmergencyScreen({Key? key}) : super(key: key);
+  EmergencyScreen({Key? key}) : super(key: key);
 
   @override
   State<EmergencyScreen> createState() => _EmergencyScreenState();
@@ -17,59 +18,55 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
 
   final EmergencyServices  emergencyServices = EmergencyServices();
   List<Hospital>? fetchList;
+  bool isMessageSend = false;
+  String? authtoken;
+
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchHospitals();
   }
 
   void fetchHospitals() async{
 
-    await emergencyServices.getCurrentLocation();
-    // bool? res = await FlutterPhoneDirectCaller.callNumber('+919579483461');
-    // print(res);
-    // Accessing _currentLocation using the getter method
-    final locationData = emergencyServices.getCurrentLocationData();
-    print(locationData);
+   await emergencyServices.getCurrentLocation();
+  final locationData = emergencyServices.getCurrentLocationData();
 
-    if (locationData != null) {
-      double? latitude = locationData.latitude;
-      double? longitude = locationData.longitude;
+  if (locationData != null) {
+    double? latitude = locationData.latitude;
+    double? longitude = locationData.longitude;
 
-      final userlocation = LatLng(latitude!, longitude!);
+    final userlocation = LatLng(latitude!, longitude!);
 
-      print('$latitude $longitude');
+    print('$latitude $longitude');
 
-      try {
-
-      fetchList = await emergencyServices.fetchNearbyHospitals(userlocation);
-
-
-
-      }catch(e){
-        print("Fetch hospital error $e");
+    try {
+      List<Hospital>? hospitals = await emergencyServices.fetchNearbyHospitals(userlocation);
+      if (hospitals != null) {
+        setState(() {
+          fetchList = hospitals;
+        });
+      } else {
+        print('No hospitals found.');
       }
-
-      print(" listvalue: $fetchList");
-
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+       authtoken = sharedPreferences.getString('x-auth-token');
       final address = await emergencyServices.getAddress(latitude, longitude);
+      String messageBody = 'Emergency at: $address';
 
-      // if (address != null) {
-      //   print('Emergency at: $address');
-      //   List<String> recipients = ["+919579483461"];
-      //   String message = "Emergency at: $address";
-      
-      // } else {
-      //   print('Failed to get address');
-      // }
-
-
-
-    } else {
-      print('Failed to get current location');
+      isMessageSend = await emergencyServices.sendMessage(authtoken,'+919579483461',messageBody);
+      if(isMessageSend)
+      print("Message send successfully");
+      print(address);
+      print('Emergency at: $address');
+    } catch (e) {
+      print("Fetch hospital error $e");
     }
+
+  } else {
+    print('Failed to get current location');
+  }
 
   }
 
@@ -79,16 +76,35 @@ class _EmergencyScreenState extends State<EmergencyScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Emergency Button"),
+        title: Text("Nearby Hospitals"),
       ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () { // Call method to get current location// Make emergency call to 911 (or your local emergency number)
-
-          },
-          child: Text("Emergency"),
-        ),
-      ),
+      body: fetchList == null
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: fetchList!.length,
+              itemBuilder: (context, index) {
+                final hospital = fetchList![index];
+                return Card(
+                  elevation: 4, // Adjust elevation as needed
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  child: ListTile(
+                    leading: Icon(Icons.local_hospital_rounded), // Hospital icon
+                    title: Text(
+                      hospital.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    subtitle: Text(
+                        'Location: ${hospital.location.latitude}, ${hospital.location.longitude}'),
+                    onTap: () {
+                      launch(
+                          'https://www.openstreetmap.org/?mlat=${hospital.location.latitude}&mlon=${hospital.location.longitude}');
+                    },
+                  ),
+                );
+              },
+            ),
     );
   }
 }

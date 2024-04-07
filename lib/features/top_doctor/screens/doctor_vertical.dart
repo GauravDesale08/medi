@@ -1,72 +1,94 @@
-// import 'package:flutter/material.dart';
-// import 'package:medihub/models/doctor.dart';
-// import '../services/doctor_service.dart';
+import 'package:flutter/material.dart';
+import 'package:medihub/features/doctor/DocDetail/DocDetailScreen.dart';
+import 'package:medihub/features/top_doctor/services/doctor_service_all.dart';
+import 'package:medihub/models/doctor.dart';
 
-// class DoctorVertical extends StatefulWidget {
-//   const DoctorVertical({Key? key}) : super(key: key);
+class DoctorVerticalMain extends StatefulWidget {
+  const DoctorVerticalMain({Key? key}) : super(key: key);
 
-//   @override
-//   State<DoctorVertical> createState() => _DoctorVerticalState();
-// }
+  @override
+  State<DoctorVerticalMain> createState() => _DoctorVerticalState();
+}
 
-// class _DoctorVerticalState extends State<DoctorVertical> {
-//   late List<Doctor> doctors;
+class _DoctorVerticalState extends State<DoctorVerticalMain> {
+  List<Doctor>? doctorList;
+  final DoctorServiceAll doctorServiceAll = DoctorServiceAll();
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     _fetchDoctors();
-//   }
+  @override
+  void initState() {
+    super.initState();
+    _fetchDoctors();
+    print("hey");
+  }
 
-//   Future<void> _fetchDoctors() async {
-//     try {
-//       final List<Doctor> fetchedDoctors = await DoctorService.fetchDoctors();
-//       setState(() {
-//         doctors = fetchedDoctors;
-//       });
-//     } catch (e) {
-//       print('Error fetching doctors: $e');
-//     }
-//   }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Center(child: const Text("Top Doctor"))),
-//       body: doctors == null
-//           ? Center(child: CircularProgressIndicator())
-//           : ListView.builder(
-//         itemCount: doctors.length,
-//         itemBuilder: (context, index) {
-//           final doctor = doctors[index];
-//           return Card(
-//             elevation: 2, // Set the elevation for the card
-//             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16), // Set margin
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(12), // Set border radius
-//               side: BorderSide(color: Colors.grey.shade300, width: 1), // Set border
-//             ),
-//             child: ListTile(
-//               leading: Image.network(doctor.imgUrl),
-//               title: Text(doctor.name),
-//               subtitle: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(doctor.position),
-//                   Row(
-//                     children: [
-//                       Icon(Icons.star, color: Colors.yellow),
-//                       Text(doctor.rating.toString()),
-//                     ],
-//                   ),
-//                   Text('${doctor.distance} km away'),
-//                 ],
-//               ),
-//             ),
-//           );
-//         },
+  _fetchDoctors() async {
 
-//       ),
-//     );
-//   }
-// }
+    doctorList = await doctorServiceAll.fetchDoctors();
+    setState(() {   
+    });
+
+  }
+
+   @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 150, // Adjust the height as needed
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.only(left: 15),
+        itemCount: doctorList?.length ?? 0,
+        itemBuilder: (context, index) {
+          final product = doctorList![index];
+          return GestureDetector(
+            onTap: () {
+              String doctId = product!.doctId!;
+              Navigator.pushNamed(context, DoctorDetail.routeName , arguments: doctId);
+              
+            },
+            child: Container(
+              width: 150, // Adjust the width of each item
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 130,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black12,
+                        width: 0.5,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Image.network(
+                        product.doctImage!,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    product.doctName!,
+                    maxLines: 1,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    '4.5',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+

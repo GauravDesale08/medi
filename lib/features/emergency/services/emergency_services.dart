@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:medihub/utils/helper.dart';
 import 'package:permission_handler/permission_handler.dart' as permission_handler;
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart' as location;
@@ -53,6 +54,7 @@ class EmergencyServices {
       final decoded = json.decode(response.body);
       final displayName = decoded['display_name'];
       final mapLink = 'https://www.openstreetmap.org/?mlat=$latitude&mlon=$longitude';
+      print('$displayName\n\nLocation: $mapLink');
       return '$displayName\n\nLocation: $mapLink';
     }
   } catch (e) {
@@ -111,6 +113,47 @@ Future<List<Hospital>> fetchNearbyHospitals(LatLng location) async {
     }
   } catch (e) {
     throw Exception('Error: $e');
+  }
+}
+
+Future<bool> sendMessage(String? token,String emergencyNumber, String messageBody) async {
+  final String apiUrl = '$uri/api/send-message'; // Replace with your API URL
+
+  // Replace the placeholders with your actual Twilio credential
+
+  try {
+    // Construct the request body
+    final Map<String, dynamic> requestBody = {
+      'emergencyNumber': emergencyNumber,
+      'messageBody': messageBody,
+    };
+
+    // Encode the request body to JSON
+    final String encodedBody = json.encode(requestBody);
+
+    // Make the POST request to the API endpoint
+    final http.Response response = await http.post(
+      Uri.parse(apiUrl),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'x-auth-token': token!,
+      },
+      body: encodedBody,
+    );
+
+    // Check if the request was successful (status code 200)
+    if (response.statusCode == 200) {
+      print('Message sent successfully');
+      return true;
+    } else {
+      // Print the error message if the request was not successful
+      print('Error: ${response.body}');
+      return false;
+    }
+  } catch (error) {
+    // Print any exceptions that occur during the process
+    print('Error: $error');
+    return false;
   }
 }
 

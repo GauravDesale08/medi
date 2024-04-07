@@ -11,7 +11,9 @@ import 'package:medihub/features/emergency/screens/emergency_screen.dart';
 import 'package:medihub/features/emergency/services/emergency_services.dart';
 import 'package:medihub/features/news/pages/home.dart';
 import 'package:medihub/features/news/pages/vertHome.dart';
+import 'package:medihub/features/pharmacy/screens/verticalList.dart';
 import 'package:medihub/features/top_doctor/screens/doctor_hori.dart';
+import 'package:medihub/features/top_doctor/screens/doctor_vertical.dart';
 import 'package:medihub/providers/user_provider.dart';
 import 'package:medihub/utils/customBanner.dart';
 import 'package:medihub/utils/customContainer.dart';
@@ -31,51 +33,39 @@ class _Home1State extends State<Home1> {
 
 
  void emergency() async {
+  await emergencyServices.getCurrentLocation();
+  final locationData = emergencyServices.getCurrentLocationData();
 
-    await emergencyServices.getCurrentLocation();
-    // bool? res = await FlutterPhoneDirectCaller.callNumber('+919579483461');
-    // print(res);
-    // Accessing _currentLocation using the getter method
-    final locationData = emergencyServices.getCurrentLocationData();
-    print(locationData);
+  if (locationData != null) {
+    double? latitude = locationData.latitude;
+    double? longitude = locationData.longitude;
 
-    if (locationData != null) {
-      double? latitude = locationData.latitude;
-      double? longitude = locationData.longitude;
+    final userlocation = LatLng(latitude!, longitude!);
 
-      final userlocation = LatLng(latitude!, longitude!);
+    print('$latitude $longitude');
 
-      print('$latitude $longitude');
-
-      try {
-
-      fetchList = await emergencyServices.fetchNearbyHospitals(userlocation);
-
-
-
-      }catch(e){
-        print("Fetch hospital error $e");
+    try {
+      List<Hospital>? hospitals = await emergencyServices.fetchNearbyHospitals(userlocation);
+      if (hospitals != null) {
+        setState(() {
+          fetchList = hospitals;
+        });
+      } else {
+        print('No hospitals found.');
       }
-
-      print(" listvalue: $fetchList");
-
-      final address = await emergencyServices.getAddress(latitude, longitude);
-
-      // if (address != null) {
-      //   print('Emergency at: $address');
-      //   List<String> recipients = ["+919579483461"];
-      //   String message = "Emergency at: $address";
       
-      // } else {
-      //   print('Failed to get address');
-      // }
-
-
-
-    } else {
-      print('Failed to get current location');
+      final address = await emergencyServices.getAddress(latitude, longitude);
+      print(address);
+      print('Emergency at: $address');
+    } catch (e) {
+      print("Fetch hospital error $e");
     }
+
+  } else {
+    print('Failed to get current location');
   }
+}
+
 
 
 
@@ -184,7 +174,8 @@ class _Home1State extends State<Home1> {
                           ],
                         ),
                        
-                        // HorizontalDoctorList(),
+                        SizedBox(height: 16),
+                        DoctorVerticalMain()
                       ],
                     ),
                   ),
@@ -228,43 +219,43 @@ class _Home1State extends State<Home1> {
                 //   ),
                 // ),
 
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, left: 18, right: 5),
-                  child: SizedBox(
-                    width: 383,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Health Articles",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, Home.routeName);
-                              },
-                              child: const Text(
-                                "See All",
-                                style: TextStyle(
-                                  color: shadowColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                // Padding(
+                //   padding: const EdgeInsets.only(top: 15, left: 18, right: 5),
+                //   child: SizedBox(
+                //     width: 383,
+                //     child: Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         Row(
+                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //           children: [
+                //             const Text(
+                //               "Health Articles",
+                //               style: TextStyle(
+                //                   fontSize: 20, fontWeight: FontWeight.bold),
+                //             ),
+                //             GestureDetector(
+                //               onTap: () {
+                //                 Navigator.pushNamed(
+                //                     context, Home.routeName);
+                //               },
+                //               child: const Text(
+                //                 "See All",
+                //                 style: TextStyle(
+                //                   color: shadowColor,
+                //                   fontWeight: FontWeight.bold,
+                //                 ),
+                //               ),
+                //             ),
+                //           ],
+                //         ),
                         
-                        // HorizontalDoctorList(),
-                        //   VertHome(),
-                      ],
-                    ),
-                  ),
-                ),
+                //         // HorizontalDoctorList(),
+                //         //   VertHome(),
+                //       ],
+                //     ),
+                //   ),
+                // ),
 
               ],
             ),
