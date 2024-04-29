@@ -75,7 +75,7 @@ class _VerticalListState extends State<VerticalList> {
           pharmacyList == null ? Center(child: const CircularProgressIndicator()) : Column(
             children: [
               SizedBox(
-                      height: 160,
+                      height: 250,
                       child: GridView.builder(
                         scrollDirection: Axis.horizontal,
                         padding: const EdgeInsets.only(left: 15),

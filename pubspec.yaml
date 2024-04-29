@@ -53,6 +53,7 @@ dependencies:
   latlong2: ^0.9.1
   flutter_map: ^6.1.0
   socket_io_client: ^2.0.3+1
+  webview_flutter: ^4.7.0
 
 
 dev_dependencies:

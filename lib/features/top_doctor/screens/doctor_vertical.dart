@@ -18,7 +18,6 @@ class _DoctorVerticalState extends State<DoctorVerticalMain> {
   void initState() {
     super.initState();
     _fetchDoctors();
-    print("hey");
   }
 
 
@@ -33,7 +32,7 @@ class _DoctorVerticalState extends State<DoctorVerticalMain> {
    @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 150, // Adjust the height as needed
+      height: 200, // Adjust the height as needed
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.only(left: 15),
@@ -47,7 +46,8 @@ class _DoctorVerticalState extends State<DoctorVerticalMain> {
               
             },
             child: Container(
-              width: 150, // Adjust the width of each item
+              width: 150,
+              height: 170, // Adjust the width of each item
               padding: const EdgeInsets.all(8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,7 @@ class _DoctorVerticalState extends State<DoctorVerticalMain> {
                       padding: const EdgeInsets.all(8),
                       child: Image.network(
                         product.doctImage!,
-                        fit: BoxFit.cover,
+                        // fit: BoxFit.fill,
                       ),
                     ),
                   ),

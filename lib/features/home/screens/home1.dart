@@ -128,7 +128,7 @@ class _Home1State extends State<Home1> {
                         routeName: 'pharmacy',
                       ),
                       CustomContainer(
-                        text: 'Hospital',
+                        text: 'Exercises',
                         imagePath: 'assets/Hospital.png',
                         routeName:
                             '/exercise-types', // Replace '/hospital' with the actual named route

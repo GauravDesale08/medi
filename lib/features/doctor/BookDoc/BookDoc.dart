@@ -283,7 +283,7 @@ class _BookingPageState extends State<BookingPage> {
             ElevatedButton(
               onPressed: () {
                 openPaymentPortal();
-                // bookAppointmentHelper(widget.doctId, widget.timeslotId, widget.date);
+                bookAppointmentHelper(widget.doctId, widget.timeslotId, widget.date);
               },
               child: Text('Pay Now'),
             ),
